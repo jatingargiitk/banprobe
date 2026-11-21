@@ -64,8 +64,10 @@ JAIL
   # fail2ban can leave f2b-web and its hook behind on stop; the next start then
   # fails to create the chain and keeps banning through the old hook
   sudo iptables-save | grep -E '^-A [A-Z-]+ .*-j f2b-web$' | sed 's/^-A/-D/' |
-    while read -r rule; do sudo iptables $rule; done
-  sudo iptables -F f2b-web 2> /dev/null && sudo iptables -X f2b-web
+    while read -r rule; do sudo iptables $rule; done || true
+  if sudo iptables -n -L f2b-web > /dev/null 2>&1; then
+    sudo iptables -F f2b-web && sudo iptables -X f2b-web
+  fi
   sudo rm -f /var/lib/fail2ban/fail2ban.sqlite3
   sudo systemctl start fail2ban
   for _ in $(seq 30); do sudo fail2ban-client ping > /dev/null 2>&1 && break; sleep 1; done
