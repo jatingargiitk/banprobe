@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "banprobe"
+version = "0.1.0"
+description = "Check whether IPs banned by fail2ban can still reach your Docker-published ports, by walking the iptables ruleset."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Jatin Garg" }]
+requires-python = ">=3.9"
+dependencies = []
+keywords = ["fail2ban", "docker", "iptables", "firewall", "docker-user", "selfhosted"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: System :: Networking :: Firewalls",
+  "Topic :: System :: Systems Administration",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+banprobe = "banprobe.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/jatingargiitk/banprobe"
+
+[tool.setuptools]
+packages = ["banprobe"]
