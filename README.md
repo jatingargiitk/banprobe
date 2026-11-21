@@ -37,7 +37,7 @@ If `iptables-save` warns `iptables-legacy tables present`, save `sudo iptables-l
 
 ## Example
 
-`examples/server` is a saved state from a host running a WordPress compose project: `blog-wordpress-1` published as `:8080`, `blog-adminer-1` as `:8081`, and two fail2ban jails with the default `iptables-multiport` ban action. The `wordpress` jail has `port = 8080`, the port people open in the browser. The parts of `iptables-save.txt` that matter:
+`examples/server` is the saved state of a host running a WordPress compose project (written for this example, in the rule layout Docker 28 creates): `blog-wordpress-1` published as `:8080`, `blog-adminer-1` as `:8081`, and two fail2ban jails with the default `iptables-multiport` ban action. The `wordpress` jail has `port = 8080`, the port people open in the browser. The parts of `iptables-save.txt` that matter:
 
 ```
 *filter
@@ -207,7 +207,7 @@ It is a simulation of the ruleset you give it, not a security proof.
 
 ## Tested against real packets
 
-Besides the unit tests on saved rulesets (including ones captured from real hosts), CI runs `tests/e2e/real_packets.sh` on an Ubuntu 24.04 runner: it starts nginx published as `:8080`, puts a client with address `10.200.0.2` in a network namespace, bans it with fail2ban, and for each of the three jail setups above checks banprobe's live verdict against what a real `curl` from that address does (REACHABLE and the page loads; BLOCKED and the connection is refused). The script changes the firewall and fail2ban config; it is meant for throwaway machines.
+Besides the unit tests on saved rulesets, CI runs `tests/e2e/real_packets.sh` on an Ubuntu 24.04 runner: it starts nginx published as `:8080`, puts a client with address `10.200.0.2` in a network namespace, bans it with fail2ban, and for each of the three jail setups above checks banprobe's live verdict against what a real `curl` from that address does (REACHABLE and the page loads; BLOCKED and the connection is refused). The rulesets it saved on the runner (Docker 28.0.4, iptables-nft 1.8.10, fail2ban 1.0.2) are in `tests/fixtures/runner` and checked offline by the unit tests. The script changes the firewall and fail2ban config; it is meant for throwaway machines.
 
 ## License
 
