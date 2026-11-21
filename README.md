@@ -71,12 +71,12 @@ REACHABLE    192.0.2.44      wordpress  :8080 -> blog-wordpress-1 172.18.0.2:80
   path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.2:80 (iptables-save.txt:62)
         filter FORWARD -> DOCKER-USER -> DOCKER-FORWARD -> DOCKER-CT -> DOCKER-ISOLATION-STAGE-1 -> DOCKER-BRIDGE -> DOCKER: ACCEPT (iptables-save.txt:27)
   why:  f2b-wordpress is hooked from INPUT (iptables-save.txt:23), but :8080 is DNATed to 172.18.0.2:80, so the connection goes through FORWARD and never passes INPUT
-  fix:  set `chain = DOCKER-USER` for [wordpress] in jail.local (e.g. `banaction = iptables-multiport[chain="DOCKER-USER"]`); in DOCKER-USER the port is already the container port, so use `port = 80` (or match the host port with `-m conntrack --ctorigdstport 8080`)
+  fix:  set `chain = DOCKER-USER` for [wordpress] in jail.local; in DOCKER-USER the port is already the container port, so use `port = 80` (or match the host port with `-m conntrack --ctorigdstport 8080`)
 REACHABLE    203.0.113.7     wordpress  :8080 -> blog-wordpress-1 172.18.0.2:80
   path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.2:80 (iptables-save.txt:62)
         filter FORWARD -> DOCKER-USER -> DOCKER-FORWARD -> DOCKER-CT -> DOCKER-ISOLATION-STAGE-1 -> DOCKER-BRIDGE -> DOCKER: ACCEPT (iptables-save.txt:27)
   why:  f2b-wordpress is hooked from INPUT (iptables-save.txt:23), but :8080 is DNATed to 172.18.0.2:80, so the connection goes through FORWARD and never passes INPUT
-  fix:  set `chain = DOCKER-USER` for [wordpress] in jail.local (e.g. `banaction = iptables-multiport[chain="DOCKER-USER"]`); in DOCKER-USER the port is already the container port, so use `port = 80` (or match the host port with `-m conntrack --ctorigdstport 8080`)
+  fix:  set `chain = DOCKER-USER` for [wordpress] in jail.local; in DOCKER-USER the port is already the container port, so use `port = 80` (or match the host port with `-m conntrack --ctorigdstport 8080`)
 skipped      198.51.100.23   sshd       :8080: jail sshd only covers port(s) 22
 skipped      198.51.100.23   sshd       :8081: jail sshd only covers port(s) 22
 skipped      192.0.2.44      wordpress  :8081: jail wordpress only covers port(s) 8080
@@ -151,7 +151,8 @@ The jail config for that:
 [wordpress]
 enabled   = true
 port      = 80
-banaction = iptables-multiport[chain="DOCKER-USER"]
+chain     = DOCKER-USER
+banaction = iptables-multiport
 ```
 
 To ban on the host port instead, a ban action can match `-m conntrack --ctorigdstport 8080` in `DOCKER-USER`; banprobe evaluates that match too.

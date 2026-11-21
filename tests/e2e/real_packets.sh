@@ -57,7 +57,8 @@ filter = banprobe-web
 logpath = /var/log/banprobe-web.log
 backend = polling
 port = $2
-banaction = iptables-multiport[chain="$1"]
+chain = $1
+banaction = iptables-multiport
 JAIL
   sudo fail2ban-client unban --all > /dev/null 2>&1 || true
   sudo systemctl stop fail2ban

@@ -150,8 +150,7 @@ def explain(p: Probe, names: List[str], hks: List[Rule]) -> None:
             p.why = (f"{label} is hooked from {_hooked_from(hks)}, but :{hp} is DNATed "
                      f"to {to}, so the connection goes through FORWARD and never passes "
                      f"{'/'.join(dict.fromkeys(h.chain for h in hks))}")
-            p.fix = (f"set `chain = DOCKER-USER` for [{jail}] in jail.local "
-                     f"(e.g. `banaction = iptables-multiport[chain=\"DOCKER-USER\"]`)")
+            p.fix = f"set `chain = DOCKER-USER` for [{jail}] in jail.local"
             specs = [hook_ports(h) for h in hks]
             if hp != cp and all(s is not None and not _in_ports(cp, s) for s in specs):
                 p.fix += (f"; in DOCKER-USER the port is already the container port, so use "
