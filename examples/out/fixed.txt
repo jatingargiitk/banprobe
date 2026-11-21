@@ -1,0 +1,15 @@
+new TCP connections from 3 banned IP(s) to 2 published port(s), arriving on an unknown interface, sent to any host address
+
+BLOCKED      192.0.2.44      wordpress  :8080 -> blog-wordpress-1 172.18.0.2:80
+  path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.2:80 (iptables-save.txt:62)
+        filter FORWARD -> DOCKER-USER -> f2b-wordpress: REJECT (iptables-save.txt:46)
+BLOCKED      203.0.113.7     wordpress  :8080 -> blog-wordpress-1 172.18.0.2:80
+  path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.2:80 (iptables-save.txt:62)
+        filter FORWARD -> DOCKER-USER -> f2b-wordpress: REJECT (iptables-save.txt:47)
+skipped      198.51.100.23   sshd       :8080: jail sshd only covers port(s) 22
+skipped      198.51.100.23   sshd       :8081: jail sshd only covers port(s) 22
+skipped      192.0.2.44      wordpress  :8081: jail wordpress only covers port(s) 80
+skipped      203.0.113.7     wordpress  :8081: jail wordpress only covers port(s) 80
+
+2 checked: 0 reachable, 2 blocked, 0 inconclusive; 4 skipped (port outside the jail's ports)
+exit 0

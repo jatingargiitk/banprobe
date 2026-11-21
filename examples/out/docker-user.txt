@@ -1,0 +1,23 @@
+new TCP connections from 3 banned IP(s) to 2 published port(s), arriving on an unknown interface, sent to any host address
+
+REACHABLE    192.0.2.44      wordpress  :8080 -> blog-wordpress-1 172.18.0.2:80
+  path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.2:80 (iptables-save.txt:62)
+        filter FORWARD -> DOCKER-USER -> DOCKER-FORWARD -> DOCKER-CT -> DOCKER-ISOLATION-STAGE-1 -> DOCKER-BRIDGE -> DOCKER: ACCEPT (iptables-save.txt:26)
+  why:  the f2b-wordpress hook at iptables-save.txt:43 matches port(s) 8080, but in DOCKER-USER this connection already has the container port 80 (host port 8080, DNATed to 172.18.0.2:80)
+  fix:  use `port = 80` for [wordpress], or match the host port with `-m conntrack --ctorigdstport 8080`
+BLOCKED      192.0.2.44      wordpress  :8081 -> blog-adminer-1 172.18.0.3:8080
+  path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.3:8080 (iptables-save.txt:63)
+        filter FORWARD -> DOCKER-USER -> f2b-wordpress: REJECT (iptables-save.txt:46)
+REACHABLE    203.0.113.7     wordpress  :8080 -> blog-wordpress-1 172.18.0.2:80
+  path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.2:80 (iptables-save.txt:62)
+        filter FORWARD -> DOCKER-USER -> DOCKER-FORWARD -> DOCKER-CT -> DOCKER-ISOLATION-STAGE-1 -> DOCKER-BRIDGE -> DOCKER: ACCEPT (iptables-save.txt:26)
+  why:  the f2b-wordpress hook at iptables-save.txt:43 matches port(s) 8080, but in DOCKER-USER this connection already has the container port 80 (host port 8080, DNATed to 172.18.0.2:80)
+  fix:  use `port = 80` for [wordpress], or match the host port with `-m conntrack --ctorigdstport 8080`
+BLOCKED      203.0.113.7     wordpress  :8081 -> blog-adminer-1 172.18.0.3:8080
+  path: nat PREROUTING -> DOCKER: DNAT to 172.18.0.3:8080 (iptables-save.txt:63)
+        filter FORWARD -> DOCKER-USER -> f2b-wordpress: REJECT (iptables-save.txt:47)
+skipped      198.51.100.23   sshd       :8080: jail sshd only covers port(s) 22
+skipped      198.51.100.23   sshd       :8081: jail sshd only covers port(s) 22
+
+4 checked: 2 reachable, 2 blocked, 0 inconclusive; 2 skipped (port outside the jail's ports)
+exit 1

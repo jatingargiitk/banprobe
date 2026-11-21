@@ -1,0 +1,21 @@
+Status
+|- Number of jail:	2
+`- Jail list:	sshd, wordpress
+Status for the jail: sshd
+|- Filter
+|  |- Currently failed:	3
+|  |- Total failed:	41
+|  `- Journal matches:	_SYSTEMD_UNIT=sshd.service + _COMM=sshd
+`- Actions
+   |- Currently banned:	1
+   |- Total banned:	6
+   `- Banned IP list:	198.51.100.23
+Status for the jail: wordpress
+|- Filter
+|  |- Currently failed:	0
+|  |- Total failed:	17
+|  `- File list:	/srv/wordpress/logs/access.log
+`- Actions
+   |- Currently banned:	2
+   |- Total banned:	2
+   `- Banned IP list:	192.0.2.44 203.0.113.7
