@@ -1,0 +1,3 @@
+docker 28.0.4
+iptables v1.8.10 (nf_tables)
+Fail2Ban v1.0.2
